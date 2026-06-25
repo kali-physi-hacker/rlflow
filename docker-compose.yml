@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    container_name: rlflow_api
+    ports:
+      - "8001:8001"
+    env_file: .env
+    volumes:
+      - .:/rlFlow
+    depends_on:
+      - db
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+
+  db:
+    image: postgres:16
+    container_name: rlflow_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rlflow_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
+
